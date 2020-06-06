@@ -1,0 +1,10 @@
+@import '~antd/dist/antd.css';
+
+.container {
+    margin-top: 15px;
+}
+
+.search-bar {
+    height: 50px;
+    border-radius: 25px;
+}

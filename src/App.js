@@ -1,25 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useEffect } from 'react';
 import './App.css';
+// import Dashboard from './routes/dashboard'
+// import Login from './pages/Login'
+import { BrowserRouter as Router } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
+// import { Provider } from 'react-redux';
+// import store from "./store/store";
+// import { loadUser, logout } from "./actions/authActions";
+import FetchService from "./services/fetch-service";
+import PostService from "./services/post-service";
+
+import MainRouter from "./routes/main";
+
+export const FetchServiceModule = new FetchService();
+export const PostServiceModule = new PostService();
 
 function App() {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <Router>
+        <div className="App">
+          <Switch>
+            <Route path="/" component={MainRouter} />
+          </Switch>
+        </div>
+      </Router>
   );
 }
 

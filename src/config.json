@@ -1,0 +1,8 @@
+{
+  "production": {
+    "api": "https://PROFESSIONALHOMEMEDICALSTAGINGAPI.XYZ"
+  },
+  "development": {
+    "api": "http://localhost:3001"
+  }
+}

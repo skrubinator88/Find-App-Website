@@ -1,0 +1,11 @@
+@import '~antd/dist/antd.css';
+
+.container {
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+}
+.logo {
+    margin: 20px;
+    width: 50px;
+}

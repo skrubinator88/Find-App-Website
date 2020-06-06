@@ -1,0 +1,5 @@
+@import '~antd/dist/antd.css';
+.submit-menu {
+    background-color: #E80065;
+    justify-content: center;
+}
