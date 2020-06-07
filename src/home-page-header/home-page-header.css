@@ -3,3 +3,12 @@
     background-color: #E80065;
     justify-content: center;
 }
+.header {
+    font-family: "Boldmatte Personal Use Only";
+    font-size: 35px;
+    flex-grow: 1;
+}
+
+.appBar {
+    justify-content: center;
+}

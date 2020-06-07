@@ -15,7 +15,7 @@ class SubmissionRouter extends Component {
                 <PageHeader
                     className="site-page-header"
                     onBack={() => {this.props.history.goBack()}}
-                    title="Submit a Gem"
+                    title="Back"
                     // subTitle="This is a subtitle"
                 />
                 <Switch>

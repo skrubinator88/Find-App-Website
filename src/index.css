@@ -7,6 +7,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+@font-face {
+  font-family: 'Boldmatte Personal Use Only';
+  src: local('Boldmatte Personal Use Only'), url("./fonts/Boldmatte.ttf") format('truetype');
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;

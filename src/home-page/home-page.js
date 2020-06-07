@@ -143,7 +143,7 @@ function HomePage() {
     return (
         <Layout>
             <HomePageHeader/>
-            <div style={{ padding: '0 50px', marginTop: 64 }}>
+            <div style={{ padding: '0 50px'}}>
                 <SearchBox onChangeText={setSearch} onSearch={searchGems}/>
                 {/*<div className="site-layout-background" style={{ padding: 24, minHeight: 600 }} ref={myRef}>*/}
                 {/*    {shownMediaItem ? <Modal*/}
