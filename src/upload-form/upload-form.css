@@ -3,7 +3,6 @@
 .container {
     align-items: center;
     justify-content: center;
-    width: 60%;
     flex: 1;
 }
 .logo {
@@ -30,4 +29,8 @@
 .picture-uploads {
     margin: 20px;
     align-items: center;
+}
+
+#description-field {
+    width: 300px;
 }

@@ -4,36 +4,49 @@ import {Layout, Menu, Breadcrumb, Row, Modal} from 'antd';
 import HomePageHeader from "../home-page-header/home-page-header";
 import SearchBox from "../search-box/search-box";
 import debounce from "lodash.debounce";
+import {Grid} from "@material-ui/core";
+import { makeStyles } from '@material-ui/core/styles';
 
 import { Card } from 'antd';
 import {FetchServiceModule} from "../App";
+import Paper from "@material-ui/core/Paper";
 const { Content, Footer } = Layout;
 const { Meta } = Card;
 
-function MediaList(props) {
-    const media = props.items;
-    const handleCancel = () => {
-
+const useStyles = makeStyles((theme) => ({
+    root: {
+        flexGrow: 1,
+    },
+    mediaCard: {
+        textAlign: "left",
+        maxWidth: 500,
+        maxHeight: 500,
+        padding: 20
+    },
+    cardImage: {
+        width: 400
+    },
+    gemInfo: {
+        fontSize: 14,
+        fontWeight: 500
+    },
+    gemTitle: {
+        fontSize: 17,
+        fontWeight: 500
+    },
+    gemCategory: {
+        padding: 10,
+        borderRadius: 15,
+        borderWidth: 1,
+        borderColor: "black"
+    },
+    gemUser: {
+        fontStyle: "italic"
     }
-    const listItems = media.map((mediaItem) =>
-        <Card
-            hoverable
-            style={{ width: 350, margin: 10 }}
-            cover={<img alt="example" src={mediaItem.url} />}
-            onClick={() => {props.handleModalClicked(mediaItem)}}
-        >
-            <Meta title={mediaItem.location} description={mediaItem.description} />
-        </Card>
-    );
-    return (
-        <>
-        {listItems}
-        </>
-    );
-}
+}));
 
 function HomePage() {
-    const [gems, setGems] = useState(null);
+    const [gems, setGems] = useState([]);
     const [shownMediaItem, changeShownMediaItem] = useState(null);
     const [modalOpen, changeModalOpen] = useState(false);
     const [pageNo, changePageNo] = useState(1);
@@ -110,32 +123,57 @@ function HomePage() {
         }
     };
 
-    const searchGems = async () => {
-        setGems(null)
-        await fetchGems()
-    }
+    const searchGems = debounce(async (search) => {
+        try {
+            setSearch(search);
+            setGems([]);
+            changePageNo(1);
+            await this.fetchGems();
+        } catch(err) {
+            console.log(err)
+        }
+    }, 400);
 
     const activateModal = (mediaItem) => {
         changeShownMediaItem(mediaItem)
         changeModalOpen(true)
     }
+
+    const classes = useStyles();
     return (
         <Layout>
             <HomePageHeader/>
-            <Content className="site-layout" style={{ padding: '0 50px', marginTop: 64 }}>
+            <div style={{ padding: '0 50px', marginTop: 64 }}>
                 <SearchBox onChangeText={setSearch} onSearch={searchGems}/>
-                <div className="site-layout-background" style={{ padding: 24, minHeight: 600 }} ref={myRef}>
-                    {shownMediaItem ? <Modal
-                        visible={modalOpen}
-                        title={shownMediaItem.location}
-                        footer={shownMediaItem.description}
-                        onCancel={() => {changeModalOpen(false)}}
-                    >
-                        <img alt="example" style={{ width: '100%' }} src={shownMediaItem.url} />
-                    </Modal> : null}
-                    {gems ? <MediaList items={gems} handleModalClicked={activateModal}/> : <p>No Media Found</p>}
-                </div>
-            </Content>
+                {/*<div className="site-layout-background" style={{ padding: 24, minHeight: 600 }} ref={myRef}>*/}
+                {/*    {shownMediaItem ? <Modal*/}
+                {/*        visible={modalOpen}*/}
+                {/*        title={shownMediaItem.location}*/}
+                {/*        footer={shownMediaItem.description}*/}
+                {/*        onCancel={() => {changeModalOpen(false)}}*/}
+                {/*    >*/}
+                {/*        <img alt="example" style={{ width: '100%' }} src={shownMediaItem.url} />*/}
+                {/*    </Modal> : null}*/}
+                {/*    {gems ? <MediaList items={gems} handleModalClicked={activateModal}/> : <p>No Media Found</p>}*/}
+                {/*</div>*/}
+                <br/>
+                <Grid container className={classes.root} spacing={3}>
+                    {gems.map((gem, index) => {
+                        return (
+                            <Grid item xs={12} sm={6} md={4}>
+                                <Paper className={classes.mediaCard}>
+                                    <span className={[classes.gemTitle]}>{gem.location}</span>
+                                    <br/>
+                                    <span className={[classes.gemUser]}>Submitted by User Name</span>
+                                    <br/>
+                                    <span className={[classes.gemCategory]}>Category</span>
+                                    <img src={gem.url} className={classes.cardImage}/>
+                                </Paper>
+                            </Grid>
+                        );
+                    })}
+                </Grid>
+            </div>
             <Footer style={{ textAlign: 'center' }}>Find ©2020 Created by Find APP LLC</Footer>
         </Layout>
     );
