@@ -19,12 +19,11 @@ const useStyles = makeStyles((theme) => ({
     },
     mediaCard: {
         textAlign: "left",
-        maxWidth: 500,
-        maxHeight: 500,
+        maxWidth: 400,
         padding: 20
     },
     cardImage: {
-        width: 400
+        width: 350
     },
     gemInfo: {
         fontSize: 14,
@@ -160,7 +159,7 @@ function HomePage() {
                 <Grid container className={classes.root} spacing={3}>
                     {gems.map((gem, index) => {
                         return (
-                            <Grid item xs={12} sm={6} md={4}>
+                            <Grid item xs={12} md={6} lg={4}>
                                 <Paper className={classes.mediaCard}>
                                     <span className={[classes.gemTitle]}>{gem.location}</span>
                                     <br/>

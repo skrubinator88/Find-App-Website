@@ -121,7 +121,7 @@ function UploadForm() {
                             onPlaceSelected={(place) => {
                                 changeLocation(place)
                             }}
-                            // types={}
+                            types={["establishment"]}
                             componentRestrictions={{country: "us"}}
                         />
                     </Container>
