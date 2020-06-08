@@ -1,6 +1,6 @@
 {
   "production": {
-    "api": "find-app-api.xyz"
+    "api": "http://find-app-api.xyz"
   },
   "development": {
     "api": "http://localhost:3001"
