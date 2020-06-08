@@ -73,7 +73,7 @@ function SignUp(props) {
                 appId="432606270709321"
                 autoLoad={false}
                 fields="email,first_name,last_name"
-                scope="public_profile,user_friends"
+                scope="public_profile"
                 callback={responseFacebook}
                 icon="fa-facebook" />
             <br/>
