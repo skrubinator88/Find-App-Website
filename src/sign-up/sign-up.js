@@ -71,7 +71,7 @@ function SignUp(props) {
                 <h2>or</h2>
             <FacebookLogin
                 appId="432606270709321"
-                autoLoad={true}
+                autoLoad={false}
                 fields="email,first_name,last_name"
                 scope="public_profile,user_friends"
                 callback={responseFacebook}
