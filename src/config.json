@@ -1,6 +1,6 @@
 {
   "production": {
-    "api": "https://PROFESSIONALHOMEMEDICALSTAGINGAPI.XYZ"
+    "api": "find-app-api.xyz"
   },
   "development": {
     "api": "http://localhost:3001"
