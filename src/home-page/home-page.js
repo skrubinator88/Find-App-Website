@@ -1,17 +1,18 @@
 import React, {useState, useEffect, useRef} from 'react';
 import './home-page.css';
-import {Layout, Menu, Breadcrumb, Row, Modal} from 'antd';
+import {Layout} from 'antd';
+import { BrowserRouter as Router } from 'react-router-dom';
+import {Route, Switch} from 'react-router-dom';
 import HomePageHeader from "../home-page-header/home-page-header";
 import SearchBox from "../search-box/search-box";
 import debounce from "lodash.debounce";
 import {Grid} from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
-
-import { Card } from 'antd';
 import {FetchServiceModule} from "../App";
 import Paper from "@material-ui/core/Paper";
-const { Content, Footer } = Layout;
-const { Meta } = Card;
+import FindPage from "../find-page/find-page";
+import GemCategories from "../gem-categories/gem-categories";
+const { Footer } = Layout;
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -45,9 +46,23 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function HomePage() {
+
+    return (
+        <Router>
+                <HomePageHeader/>
+
+            <Switch>
+                <Route exact path='/' component={SearchPage}/>
+                <Route exact path='/:id' component={FindPage}/>
+            </Switch>
+            <br/>
+            <Footer style={{ textAlign: 'center' }}>Find ©2020 Created by Find APP LLC</Footer>
+        </Router>
+    );
+}
+
+function SearchPage(props) {
     const [gems, setGems] = useState([]);
-    const [shownMediaItem, changeShownMediaItem] = useState(null);
-    const [modalOpen, changeModalOpen] = useState(false);
     const [pageNo, changePageNo] = useState(1);
     const [hasMore, setHasMore] = useState(false);
     const [search, setSearch] = useState(false);
@@ -84,32 +99,25 @@ function HomePage() {
     }, 350);
 
     const fetchGems = async () => {
+        setError('');
+        setIsFetching(true);
         try {
-            setError(null)
-            setIsFetching(true)
-            let response = await FetchServiceModule.fetchGems(pageNo, search)
-            if(response.status === 200) {
+            let response = await FetchServiceModule.fetchGems(pageNo, search);
+            if (response.status === 200) {
                 let data = await response.json();
-                console.log(data.rows[0])
-                let newGems;
-                if(gems) {
-                    setHasMore(gems.length < data.count );
-                    newGems = [...gems].concat(data.rows);
-                } else {
-                    newGems = data.rows
-                }
-                //add new gems to state
-                setGems(newGems)
-            } else if(response.status === 400) {
+                let newGems = (pageNo > 1) ? [...gems].concat(data.rows) : data.rows;
+                setHasMore(newGems.length < data.count );
+                setGems(newGems);
+            } else if (response.status === 400) {
                 let error = await response.json();
-                setError(error)
+                setError(error.error);
             } else {
-                setError('An error has occurred on the server')
+                setError('An error has occurred on the server');
             }
-            setIsFetching(false)
-        } catch(err) {
-            console.log(err)
-            setIsFetching(false)
+            setIsFetching(false);
+        } catch (err) {
+            console.error(err);
+            setError('An error has occurred');
         }
     }
 
@@ -127,54 +135,38 @@ function HomePage() {
             setSearch(search);
             setGems([]);
             changePageNo(1);
-            await this.fetchGems();
+            await fetchGems();
         } catch(err) {
             console.log(err)
         }
     }, 400);
 
-    const activateModal = (mediaItem) => {
-        changeShownMediaItem(mediaItem)
-        changeModalOpen(true)
-    }
-
     const classes = useStyles();
     return (
-        <Layout>
-            <HomePageHeader/>
-            <div style={{ padding: '0 50px'}}>
-                <SearchBox onChangeText={setSearch} onSearch={searchGems}/>
-                {/*<div className="site-layout-background" style={{ padding: 24, minHeight: 600 }} ref={myRef}>*/}
-                {/*    {shownMediaItem ? <Modal*/}
-                {/*        visible={modalOpen}*/}
-                {/*        title={shownMediaItem.location}*/}
-                {/*        footer={shownMediaItem.description}*/}
-                {/*        onCancel={() => {changeModalOpen(false)}}*/}
-                {/*    >*/}
-                {/*        <img alt="example" style={{ width: '100%' }} src={shownMediaItem.url} />*/}
-                {/*    </Modal> : null}*/}
-                {/*    {gems ? <MediaList items={gems} handleModalClicked={activateModal}/> : <p>No Media Found</p>}*/}
-                {/*</div>*/}
-                <br/>
-                <Grid container className={classes.root} spacing={3}>
-                    {gems.map((gem, index) => {
-                        return (
-                            <Grid item xs={12} md={6} lg={4}>
+        <div style={{ padding: '0 50px'}}>
+
+            <SearchBox onChangeText={setSearch} onSearch={searchGems}/>
+            <br/>
+            <Grid container className={classes.root} spacing={3}>
+                {gems.map((gem, index) => {
+                    return (
+                        <Grid item xs={12} md={6} lg={4}>
+                            <a href={`/${gem.id}`}>
                                 <Paper className={classes.mediaCard}>
                                     <span className={[classes.gemTitle]}>{gem.location}</span>
                                     <br/>
-                                    <span className={[classes.gemUser]}>Submitted by User Name</span>
+                                    <span className={[classes.gemUser]}>Submitted by {gem.username}</span>
                                     <br/>
-                                    <span className={[classes.gemCategory]}>Category</span>
+                                    {gem.categories ? <GemCategories categories={gem.categories}/> : null}
+                                    <br/>
                                     <img src={gem.url} className={classes.cardImage}/>
                                 </Paper>
-                            </Grid>
-                        );
-                    })}
-                </Grid>
-            </div>
-            <Footer style={{ textAlign: 'center' }}>Find ©2020 Created by Find APP LLC</Footer>
-        </Layout>
+                            </a>
+                        </Grid>
+                    );
+                })}
+            </Grid>
+        </div>
     );
 }
 

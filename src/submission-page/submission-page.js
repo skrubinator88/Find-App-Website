@@ -12,15 +12,7 @@ class SubmissionRouter extends Component {
     render() {
         return (
             <Router>
-                <PageHeader
-                    className="site-page-header"
-                    onBack={() => {this.props.history.goBack()}}
-                    title="Back"
-                    // subTitle="This is a subtitle"
-                />
                 <Switch>
-                    <Route exact path='/submit/signup' component={SignUp}/>
-                    <Route exact path='/submit/upload' component={UploadForm}/>
                 </Switch>
             </Router>
         );

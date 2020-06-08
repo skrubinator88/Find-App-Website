@@ -45,7 +45,7 @@ function HomePageHeader(props) {
             <AppBar position="static" className="appBar">
                 <Toolbar>
                     <span className="header">Find</span>
-                    <Button className={classes.menuButton} startIcon={<CloudUploadIcon />} color="inherit" href="/submit/signup">Submit a Gem</Button>
+                    <Button className={classes.menuButton} startIcon={<CloudUploadIcon />} color="inherit" href="/signup">Submit a Gem</Button>
                 </Toolbar>
             </AppBar>
         </ThemeProvider>

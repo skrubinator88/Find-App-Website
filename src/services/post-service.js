@@ -21,7 +21,7 @@ class PostService {
         })
     };
     postPerson(info) {
-        return fetch(`${api}/users/new`, {
+        return fetch(`${api}/persons/new`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
