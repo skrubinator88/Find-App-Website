@@ -12,9 +12,6 @@ class PostService {
     postGem(info) {
         return fetch(`${api}/gems/new`, {
             method: "POST",
-            headers: {
-                // 'x-access-token': store.getState().auth.token
-            },
             body: info
         }).then(resp => {
             return resp

@@ -4,7 +4,8 @@ import GemCategories from "../gem-categories/gem-categories";
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
-        textAlign: "left"
+        textAlign: "left",
+        paddingLeft: 15
     },
     gemInfo: {
         fontSize: 17,

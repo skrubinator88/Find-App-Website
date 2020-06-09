@@ -99,7 +99,7 @@ function UploadForm(props) {
 
     const handleSelect = (suggestion) => {
         // Do something with address and placeId and suggestion
-        changeLocation(suggestion.description);
+        changeLocation(suggestion.formattedSuggestion.secondaryText);
         changeTitle(suggestion.formattedSuggestion.mainText);
         setShowSuggestions(false)
     }

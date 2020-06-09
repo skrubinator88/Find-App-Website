@@ -19,6 +19,10 @@ const useStyles = makeStyles((theme) => ({
         maxWidth: "100%",
         padding: 20
     },
+    slide: {
+        padding: 15,
+        alignItems: "center"
+    },
     cardImage: {
         maxWidth: "100%"
     },
@@ -88,7 +92,7 @@ function FindPage(props) {
                         >
                             {gem.media ? gem.media.map((mediaItem, index) => {
                                 return (
-                                    <Paper>
+                                    <Paper classes={classes.slide}>
                                         <img className={classes.cardImage} src={mediaItem.url} />
                                     </Paper>
                                 );
