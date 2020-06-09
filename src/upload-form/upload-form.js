@@ -14,6 +14,9 @@ import {PageHeader} from "antd";
 import * as QueryString from "query-string"
 import {categories, categories_info} from "../Constants"
 import PlacesAutocomplete from 'react-places-autocomplete';
+import imageCompression from 'browser-image-compression';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -43,7 +46,6 @@ const useStyles = makeStyles((theme) => ({
         margin: 15
     },
     submitButton: {
-        width: 100,
         padding: 10,
         margin: 20,
         marginBottom: 50
@@ -53,6 +55,9 @@ const useStyles = makeStyles((theme) => ({
         fontSize: 14,
         margin: 5,
         cursor: "pointer"
+    },
+    circularProgress: {
+        margin: 10
     }
 }));
 
@@ -64,17 +69,28 @@ function UploadForm(props) {
     const [description, changeDescription] = useState('');
     const [selectedCategories, changeSelectedCategories] = useState([]);
     const [showSuggestions, setShowSuggestions] = useState(false)
+    const [isSubmitting, setIsSubmitting] = useState(false)
 
     const handleFilesChanged = (newFiles) => {
         console.log(newFiles)
         changeFiles(newFiles);
     };
     const submitForm = async () => {
+        setIsSubmitting(true)
         const formData = new FormData();
-
+        const options = {
+            maxSizeMB: 1,
+            maxWidthOrHeight: 1500,
+            useWebWorker: true
+        }
         for (let i = 0; i < files.length; i++) {
             let f = files[i];
-            formData.append('gem-media', f, f.name);
+            try {
+                const compressedFile = await imageCompression(f, options);
+                formData.append('gem-media', f, f.name);
+            } catch (error) {
+                console.log(error);
+            }
         }
         //remove the person id from the url query string
         const params = QueryString.parse(props.location.search);
@@ -91,8 +107,10 @@ function UploadForm(props) {
         formData.append('categories', JSON.stringify(categoryIds));
         try {
             await PostServiceModule.postGem(formData)
-            props.history.push("/")
+            props.history.push("/");
+            setIsSubmitting(false)
         } catch (err) {
+            setIsSubmitting(false);
             console.error(err)
         }
     }
@@ -228,8 +246,10 @@ function UploadForm(props) {
                     </Container>
                 </Grid>
                 <br/>
-                <Button variant="contained" className={classes.submitButton} color="secondary" onClick={submitForm}>
-                    Submit
+                <Button variant="contained" className={classes.submitButton} color="secondary" onClick={submitForm} disabled={isSubmitting}>
+                    {isSubmitting ? <><CircularProgress className={classes.circularProgress} size={20}/>
+                        Submitting</>: <>Submit</>}
+
                 </Button>
             </Grid>
         </div>

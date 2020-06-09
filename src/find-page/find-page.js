@@ -86,7 +86,7 @@ function FindPage(props) {
                     <Grid item xs={12} md={6} lg={6}>
                         <GemHeader gem={gem} size="large"/>
                         <Carousel
-                            interval={2500}
+                            interval={5000}
                             navButtonsAlwaysVisible={true}
                             className={classes.carousel}
                         >

@@ -5,7 +5,7 @@ const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
         textAlign: "left",
-        paddingLeft: 15
+        padding: 15
     },
     gemInfo: {
         fontSize: 17,
