@@ -8,7 +8,7 @@ export const categories = {
 
 export const categories_colors = {
     "Food": "red",
-    "Activities": "green",
+    "Activities": "#16F1F1",
     "Night Life": "violet",
     "Dating": "#FFE331",
     "Black Owned": "black"
@@ -21,7 +21,7 @@ export const categories_info = [
     },
     {
         name: "Activities",
-        color: "green"
+        color: "#16F1F1"
     },
     {
         name: "Night Life",
