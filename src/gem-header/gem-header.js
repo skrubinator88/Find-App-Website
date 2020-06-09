@@ -36,10 +36,10 @@ function GemHeader(props) {
     const classes = useStyles();
     return (
         <div className={classes.root}>
-            <span className={[classes.gemTitle]}>{props.gem.location}</span>
+            <span className={[classes.gemTitle]}>{props.gem.title}</span>
             <br/>
-            {/*<span className={[classes.gemLocation]}>{props.gem.location}</span>*/}
-            {/*<br/>*/}
+            <span className={[classes.gemLocation]}>{props.gem.location}</span>
+            <br/>
             <span className={[classes.gemUser]}>Submitted by {props.gem.username}</span>
             <br/>
             {props.gem.categories ? <GemCategories categories={props.gem.categories}/> : null}

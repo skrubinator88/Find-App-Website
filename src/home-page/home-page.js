@@ -153,7 +153,7 @@ function SearchPage(props) {
                         <Grid item xs={12} md={6} lg={4}>
                             <a href={`/${gem.id}`}>
                                 <Paper className={classes.mediaCard}>
-                                    <span className={[classes.gemTitle]}>{gem.location}</span>
+                                    <span className={[classes.gemTitle]}>{gem.title}</span>
                                     <br/>
                                     <span className={[classes.gemUser]}>Submitted by {gem.username}</span>
                                     <br/>

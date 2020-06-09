@@ -20,6 +20,17 @@ class FetchService {
             return resp
         })
     }
+    fetchPlace = (placeId) => {
+        return fetch(`https://maps.googleapis.com/maps/api/place/details/json?placeid=${placeId}&key=%REACT_APP_PLACES_KEY% `, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+            }
+        }).then(resp => {
+            return resp.json()
+        })
+    }
     fetchGems = (pageNo, search) => {
         let url = `${api}/gems/?pageLimit=15`;
         let page = pageNo ? pageNo : 1;

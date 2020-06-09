@@ -1,17 +1,20 @@
 import React, {useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Autocomplete from 'react-google-autocomplete';
-import {PostServiceModule} from "../App";
+import {FetchServiceModule, PostServiceModule} from "../App";
 import TextField from '@material-ui/core/TextField';
 import FileDropzone from "./file-dropzone/file-dropzone";
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
 import Container from '@material-ui/core/Container';
 import Divider from '@material-ui/core/Divider';
 import Chip from '@material-ui/core/Chip';
 import {PageHeader} from "antd";
 import * as QueryString from "query-string"
 import {categories, categories_info} from "../Constants"
+import PlacesAutocomplete from 'react-places-autocomplete';
+
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
@@ -25,7 +28,9 @@ const useStyles = makeStyles((theme) => ({
     },
     textInput: {
         margin: 5,
-        width: "100%"
+        width: "100%",
+        minHeight: 20,
+        padding: 5
     },
     titleText: {
         textAlign: 'left',
@@ -42,6 +47,12 @@ const useStyles = makeStyles((theme) => ({
         padding: 10,
         margin: 20,
         marginBottom: 50
+    },
+    suggestion: {
+        padding: 10,
+        fontSize: 14,
+        margin: 5,
+        cursor: "pointer"
     }
 }));
 
@@ -49,13 +60,15 @@ const useStyles = makeStyles((theme) => ({
 function UploadForm(props) {
     const [files, changeFiles] = useState([]);
     const [location, changeLocation] = useState('');
+    const [title, changeTitle] = useState('');
     const [description, changeDescription] = useState('');
     const [selectedCategories, changeSelectedCategories] = useState([]);
+    const [showSuggestions, setShowSuggestions] = useState(false)
 
     const handleFilesChanged = (newFiles) => {
         console.log(newFiles)
         changeFiles(newFiles);
-    }
+    };
     const submitForm = async () => {
         const formData = new FormData();
 
@@ -65,9 +78,9 @@ function UploadForm(props) {
         }
         //remove the person id from the url query string
         const params = QueryString.parse(props.location.search);
-        formData.append('location', location.formatted_address);
+        formData.append('location', location);
         // formData.append('lat', location.geometry.);
-        formData.append('title', location.name);
+        formData.append('title', title);
         formData.append('description', description);
         formData.append('personId', params.pid);
 
@@ -79,15 +92,22 @@ function UploadForm(props) {
         try {
             await PostServiceModule.postGem(formData)
             props.history.push("/")
-        } catch(err) {
+        } catch (err) {
             console.error(err)
         }
+    }
+
+    const handleSelect = (suggestion) => {
+        // Do something with address and placeId and suggestion
+        changeLocation(suggestion.description);
+        changeTitle(suggestion.formattedSuggestion.mainText);
+        setShowSuggestions(false)
     }
 
     const toggleCategory = (category) => {
         let categoryIndex = selectedCategories.indexOf(category);
         let newCategories = [...selectedCategories];
-        if(categoryIndex >= 0) {
+        if (categoryIndex >= 0) {
             newCategories.splice(categoryIndex, 1);
             changeSelectedCategories(newCategories);
         } else {
@@ -98,6 +118,31 @@ function UploadForm(props) {
 
     const classes = useStyles();
 
+    const renderFunc = ({getInputProps, getSuggestionItemProps, suggestions, loading}) => (
+        <div className="autocomplete-root">
+            <input {...getInputProps({className: classes.textInput})} placeholder="Search for locations"/>
+            <div className="autocomplete-dropdown-container">
+                {loading && <div>Searching locations...</div>}
+                {showSuggestions ? suggestions.map(suggestion => (
+                    <Paper className={classes.suggestion} {...getSuggestionItemProps(suggestion)} onClick={() => {
+                        handleSelect(suggestion)
+                    }}>
+                        <strong>
+                            {suggestion.formattedSuggestion.mainText}
+                        </strong>{' '}
+                        <small>
+                            {suggestion.formattedSuggestion.secondaryText}
+                        </small>
+                    </Paper>
+                )) : null}
+            </div>
+        </div>
+    );
+
+
+    const searchOptions = {
+        types: ['establishment']
+    }
     return (
         <div className={classes.root}>
             <PageHeader
@@ -116,15 +161,17 @@ function UploadForm(props) {
                         <h2>Submit a New Gem</h2>
                         <br/>
                         <h3 className={classes.titleText}>Location Name</h3>
-                        <Autocomplete
-                            className={classes.textInput}
-                            onPlaceSelected={(place) => {
-                                console.log(place)
-                                changeLocation(place)
+                        <PlacesAutocomplete
+                            value={location}
+                            debounce={300}
+                            onChange={address => {
+                                setShowSuggestions(true)
+                                changeLocation(address)
                             }}
-                            types={["establishment"]}
-                            componentRestrictions={{country: "us"}}
-                        />
+                            searchOptions={searchOptions}
+                        >
+                            {renderFunc}
+                        </PlacesAutocomplete>;
                     </Container>
                 </Grid>
                 <br/>

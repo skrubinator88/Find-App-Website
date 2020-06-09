@@ -20,10 +20,13 @@
     "react-dom": "^16.13.1",
     "react-facebook-login": "^4.1.1",
     "react-google-autocomplete": "^1.2.6",
+    "react-google-maps": "^9.4.5",
     "react-material-ui-carousel": "^1.5.1",
+    "react-places-autocomplete": "^7.2.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
-    "react-swipeable-views": "^0.13.9"
+    "react-swipeable-views": "^0.13.9",
+    "recompose": "^0.30.0"
   },
   "scripts": {
     "start": "HTTPS=true react-scripts start",
