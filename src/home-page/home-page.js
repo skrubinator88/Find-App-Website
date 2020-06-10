@@ -66,18 +66,18 @@ function SearchPage(props) {
     const [gems, setGems] = useState([]);
     const [pageNo, changePageNo] = useState(1);
     const [hasMore, setHasMore] = useState(false);
-    const [search, setSearch] = useState(false);
+    const [search, setSearch] = useState('');
     const [isFetching, setIsFetching] = useState(false)
     const [error, setError] = useState(null)
 
     useEffect(()=>{
         fetchGems()
     },[])
-    const fetchGems = async () => {
+    const fetchGems = async (pageNo, providedSearch) => {
         setError('');
         setIsFetching(true);
         try {
-            let response = await FetchServiceModule.fetchGems(pageNo, search);
+            let response = await FetchServiceModule.fetchGems(pageNo, providedSearch)
             if (response.status === 200) {
                 let data = await response.json();
                 let newGems = (pageNo > 1) ? [...gems].concat(data.rows) : data.rows;
@@ -99,27 +99,27 @@ function SearchPage(props) {
     const loadMore = async () => {
         changePageNo(pageNo + 1);
         try {
-            await fetchGems(pageNo)
+            await fetchGems(pageNo, search)
         } catch(err) {
             console.log(err)
         }
     };
 
-    const searchGems = debounce(async (search) => {
+    const searchGems = async (search) => {
         try {
             setSearch(search);
             setGems([]);
             changePageNo(1);
-            await fetchGems();
+            await fetchGems(1, search);
         } catch(err) {
             console.log(err)
         }
-    }, 400);
+    };
 
     return (
         <div style={{ padding: '0 50px'}}>
 
-            <SearchBox onChangeText={setSearch} onSearch={searchGems}/>
+            <SearchBox onSearch={searchGems}/>
             <br/>
             <GemList gems={gems} isFetching={isFetching} hasMore={hasMore} loadMore={loadMore}/>
         </div>

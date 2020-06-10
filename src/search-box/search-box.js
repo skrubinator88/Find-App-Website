@@ -5,8 +5,7 @@ const { Search } = Input;
 
 function SearchBox(props) {
     const handleSearch = (value) => {
-        props.onChangeText(value)
-        props.onSearch()
+        props.onSearch(value)
     }
     return (
         <div className="container">
