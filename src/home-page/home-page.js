@@ -12,6 +12,7 @@ import {FetchServiceModule} from "../App";
 import Paper from "@material-ui/core/Paper";
 import FindPage from "../find-page/find-page";
 import GemCategories from "../gem-categories/gem-categories";
+import GemList from "../search-results/gem-list";
 const { Footer } = Layout;
 
 const useStyles = makeStyles((theme) => ({
@@ -69,35 +70,9 @@ function SearchPage(props) {
     const [isFetching, setIsFetching] = useState(false)
     const [error, setError] = useState(null)
 
-    let myRef = useRef(null);
-
-    useEffect(() => {
+    useEffect(()=>{
         fetchGems()
-        document.addEventListener('wheel', handleScroll, { passive: true });
-        document.addEventListener('scroll', handleScroll, { passive: true });
-        return () => {
-            document.removeEventListener('scroll', handleScroll);
-            document.removeEventListener('wheel', handleScroll);
-        };
-    }, []);
-
-    const handleScroll = debounce(async (e) => {
-        if (!hasMore) {
-            return
-        }
-        const node = myRef.current;
-        if (node) {
-            let scrollTop = node.scrollTop;
-            let clientHeight = node.clientHeight;
-            let scrollHeight = node.scrollHeight;
-            let scrolledToBottom = Math.ceil(scrollTop + clientHeight) >= scrollHeight;
-
-            if (scrolledToBottom) {
-                await loadMore()
-            }
-        }
-    }, 350);
-
+    },[])
     const fetchGems = async () => {
         setError('');
         setIsFetching(true);
@@ -124,7 +99,7 @@ function SearchPage(props) {
     const loadMore = async () => {
         changePageNo(pageNo + 1);
         try {
-            await this.fetchGems(pageNo)
+            await fetchGems(pageNo)
         } catch(err) {
             console.log(err)
         }
@@ -141,31 +116,12 @@ function SearchPage(props) {
         }
     }, 400);
 
-    const classes = useStyles();
     return (
         <div style={{ padding: '0 50px'}}>
 
             <SearchBox onChangeText={setSearch} onSearch={searchGems}/>
             <br/>
-            <Grid container className={classes.root} spacing={3}>
-                {gems.map((gem, index) => {
-                    return (
-                        <Grid item xs={12} md={6} lg={4}>
-                            <a href={`/${gem.id}`}>
-                                <Paper className={classes.mediaCard}>
-                                    <span className={[classes.gemTitle]}>{gem.title}</span>
-                                    <br/>
-                                    <span className={[classes.gemUser]}>Submitted by {gem.username}</span>
-                                    <br/>
-                                    {gem.categories ? <GemCategories categories={gem.categories}/> : null}
-                                    <br/>
-                                    <img src={gem.url} className={classes.cardImage}/>
-                                </Paper>
-                            </a>
-                        </Grid>
-                    );
-                })}
-            </Grid>
+            <GemList gems={gems} isFetching={isFetching} hasMore={hasMore} loadMore={loadMore}/>
         </div>
     );
 }

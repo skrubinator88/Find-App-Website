@@ -79,15 +79,14 @@ function UploadForm(props) {
         setIsSubmitting(true)
         const formData = new FormData();
         const options = {
-            maxSizeMB: 1,
+            maxSizeMB: 0.5,
             maxWidthOrHeight: 1500,
-            useWebWorker: true
         }
         for (let i = 0; i < files.length; i++) {
             let f = files[i];
             try {
                 const compressedFile = await imageCompression(f, options);
-                formData.append('gem-media', f, f.name);
+                formData.append('gem-media', compressedFile, f.name);
             } catch (error) {
                 console.log(error);
             }
