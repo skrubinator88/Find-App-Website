@@ -23,13 +23,14 @@ const useStyles = makeStyles((theme) => ({
         padding: 10,
         borderRadius: 15,
         borderWidth: 1,
-        borderColor: "black"
+        borderColor: "black",
     },
     gemUser: {
         fontStyle: "italic"
     },
     gemDescription: {
-        fontSize: 20
+        fontSize: 15,
+        textColor: 'black'
     }
 }));
 

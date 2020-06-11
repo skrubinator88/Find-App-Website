@@ -13,10 +13,14 @@ const useStyles = makeStyles((theme) => ({
     mediaCard: {
         textAlign: "left",
         maxWidth: "100%",
+        maxHeight: 450,
         padding: 20
     },
     cardImage: {
-        width: "100%"
+        maxWidth: "100%",
+        maxHeight: 300,
+        width: "auto",
+        height: "auto"
     },
     gemInfo: {
         fontSize: 14,
