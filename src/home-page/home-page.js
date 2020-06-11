@@ -87,7 +87,7 @@ class SearchPage extends Component {
     loadMore = async () => {
         this.setState({pageNo: this.state.pageNo + 1});
         try {
-            let categoryIds = this.state.categories.map(category => {
+            let categoryIds = this.state.selectedCategories.map(category => {
                 return categories[category]
             });
             let categoriesFinal = categoryIds.length > 0 ? JSON.stringify(categoryIds) : null;
