@@ -91,7 +91,7 @@ class SearchPage extends Component {
                 return categories[category]
             });
             let categoriesFinal = categoryIds.length > 0 ? JSON.stringify(categoryIds) : null;
-            await this.fetchGems(this.state.pageNo, this.state.search, categoriesFinal)
+            await this.fetchGems(this.state.pageNo + 1, this.state.search, categoriesFinal)
         } catch(err) {
             console.log(err)
         }
