@@ -73,7 +73,7 @@ const GemList = (props) => {
             let scrollTop = node.scrollTop;
             let clientHeight = node.clientHeight;
             let scrollHeight = node.scrollHeight;
-            let scrolledToBottom = Math.ceil(scrollTop + clientHeight) >= scrollHeight;
+            let scrolledToBottom = Math.ceil(scrollTop + clientHeight) >= scrollHeight / 4;
 
             if(scrolledToBottom) {
                 await props.loadMore()
