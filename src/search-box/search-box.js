@@ -13,6 +13,7 @@ function SearchBox(props) {
                 placeholder="Search places"
                 onSearch={value => handleSearch(value)}
                 size="large"
+                allowClear={true}
                 enterButton />
         </div>
     );

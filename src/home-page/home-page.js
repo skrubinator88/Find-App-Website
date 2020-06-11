@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './home-page.css';
-import {Layout} from 'antd';
+import {Layout, PageHeader} from 'antd';
 import { BrowserRouter as Router } from 'react-router-dom';
 import {Route, Switch} from 'react-router-dom';
 import HomePageHeader from "../home-page-header/home-page-header";
@@ -124,6 +124,11 @@ class SearchPage extends Component {
 
                 <SearchBox onSearch={this.searchGems}/>
                 <br/>
+                {this.state.search.length > 0 ? <PageHeader
+                    className="site-page-header"
+                    onBack={() => {this.searchGems('')}}
+                    title={this.state.search}
+                />: null}
                 <Container>
                     <span style={{fontSize: 16, fontWeight: 700}}>Filter By Category:</span>
                     <GemCategoriesSelect selectedCategories={this.state.selectedCategories} toggleCategory={this.toggleCategory}/>
