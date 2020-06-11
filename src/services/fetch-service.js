@@ -31,11 +31,12 @@ class FetchService {
             return resp.json()
         })
     }
-    fetchGems = (pageNo, search) => {
+    fetchGems = (pageNo, search, categories) => {
         let url = `${api}/gems/?pageLimit=15`;
         let page = pageNo ? pageNo : 1;
         url = url + '&pageNo=' + page;
         if(search) url = url + '&search=' + search;
+        if(categories) url = url + '&categories=' + categories;
         return fetch(url, {
             method: "GET",
             headers: {

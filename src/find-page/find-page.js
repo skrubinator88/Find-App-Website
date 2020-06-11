@@ -8,7 +8,6 @@ import Paper from "@material-ui/core/Paper";
 import { PageHeader } from 'antd';
 import Carousel from 'react-material-ui-carousel'
 import GemHeader from "../gem-header/gem-header";
-import GemCategories from "../gem-categories/gem-categories";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -74,11 +73,12 @@ function FindPage(props) {
     };
 
     const classes = useStyles();
+
     return (
         <div>
             <PageHeader
                 className="site-page-header"
-                onBack={() => {props.history.goBack()}}
+                onBack={() => {props.history.push('/')}}
                 title="Back to Home"
             />
             <Grid container className={classes.root} spacing={3}>

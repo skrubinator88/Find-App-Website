@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {Component} from 'react';
 import './home-page.css';
 import {Layout} from 'antd';
 import { BrowserRouter as Router } from 'react-router-dom';
@@ -6,44 +6,23 @@ import {Route, Switch} from 'react-router-dom';
 import HomePageHeader from "../home-page-header/home-page-header";
 import SearchBox from "../search-box/search-box";
 import debounce from "lodash.debounce";
-import {Grid} from "@material-ui/core";
+import {Container} from "@material-ui/core";
 import { makeStyles } from '@material-ui/core/styles';
 import {FetchServiceModule} from "../App";
 import Paper from "@material-ui/core/Paper";
 import FindPage from "../find-page/find-page";
-import GemCategories from "../gem-categories/gem-categories";
+import {GemCategoriesSelect} from "../gem-categories/gem-categories";
 import GemList from "../search-results/gem-list";
+import {categories} from "../Constants";
+
 const { Footer } = Layout;
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        flexGrow: 1,
+    titleText: {
+        textAlign: 'left',
+        fontSize: 16,
+        fontWeight: 700
     },
-    mediaCard: {
-        textAlign: "left",
-        maxWidth: "100%",
-        padding: 20
-    },
-    cardImage: {
-        width: "100%"
-    },
-    gemInfo: {
-        fontSize: 14,
-        fontWeight: 500
-    },
-    gemTitle: {
-        fontSize: 17,
-        fontWeight: 500
-    },
-    gemCategory: {
-        padding: 10,
-        borderRadius: 15,
-        borderWidth: 1,
-        borderColor: "black"
-    },
-    gemUser: {
-        fontStyle: "italic"
-    }
 }));
 
 function HomePage() {
@@ -62,68 +41,98 @@ function HomePage() {
     );
 }
 
-function SearchPage(props) {
-    const [gems, setGems] = useState([]);
-    const [pageNo, changePageNo] = useState(1);
-    const [hasMore, setHasMore] = useState(false);
-    const [search, setSearch] = useState('');
-    const [isFetching, setIsFetching] = useState(false)
-    const [error, setError] = useState(null)
+class SearchPage extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            error: '',
+            gems: [],
+            search: '',
+            pageNo: 1,
+            hasMore: false,
+            isFetching: false,
+            selectedCategories: []
+        };
+    }
 
-    useEffect(()=>{
-        fetchGems()
-    },[])
-    const fetchGems = async (pageNo, providedSearch) => {
-        setError('');
-        setIsFetching(true);
+    componentDidMount = async () => {
         try {
-            let response = await FetchServiceModule.fetchGems(pageNo, providedSearch)
+            await this.fetchGems(this.state.pageNo)
+        } catch(err) {
+            console.log(err)
+        }
+    };
+    fetchGems = async (pageNo, providedSearch, categoryIds) => {
+        console.log(this.state.selectedCategories, " Fetching gems");
+        this.setState({error: '', isFetching: true});
+        try {
+            let response = await FetchServiceModule.fetchGems(pageNo, providedSearch, categoryIds);
             if (response.status === 200) {
                 let data = await response.json();
-                let newGems = (pageNo > 1) ? [...gems].concat(data.rows) : data.rows;
-                setHasMore(newGems.length < data.count );
-                setGems(newGems);
+                let newGems = (pageNo > 1) ? [...this.state.gems].concat(data.rows) : data.rows;
+                this.setState({hasMore: newGems.length < data.count, gems: newGems})
             } else if (response.status === 400) {
                 let error = await response.json();
-                setError(error.error);
+                this.setState({error: error.error});
             } else {
-                setError('An error has occurred on the server');
+                this.setState({error: 'An error has occurred on the server'});
             }
-            setIsFetching(false);
+            this.setState({isFetching: false});
         } catch (err) {
             console.error(err);
-            setError('An error has occurred');
+            this.setState({error: 'An error has occurred'});
         }
     }
 
-    const loadMore = async () => {
-        changePageNo(pageNo + 1);
+    loadMore = async () => {
+        this.setState({pageNo: this.state.pageNo + 1});
         try {
-            await fetchGems(pageNo, search)
+            await this.fetchGems(this.state.pageNo, this.state.search)
         } catch(err) {
             console.log(err)
         }
     };
 
-    const searchGems = async (search) => {
+    searchGems = async (search) => {
         try {
-            setSearch(search);
-            setGems([]);
-            changePageNo(1);
-            await fetchGems(1, search);
+            this.setState({search: search, gems: [], pageNo: 1})
+            await this.fetchGems(1, search);
         } catch(err) {
             console.log(err)
         }
     };
 
-    return (
-        <div style={{ padding: '0 50px'}}>
+    toggleCategory = async (category) => {
+        let categoryIndex = this.state.selectedCategories.indexOf(category);
+        let newCategories = [...this.state.selectedCategories];
+        if (categoryIndex >= 0) {
+            newCategories.splice(categoryIndex, 1);
+        } else {
+            newCategories.push(category);
+        }
+        this.setState({selectedCategories: newCategories});
+        this.setState({gems: [], pageNo: 1})
+        let categoryIds = newCategories.map(category => {
+            return categories[category]
+        });
+        let categoriesFinal = categoryIds.length > 0 ? JSON.stringify(categoryIds) : null;
+        await this.fetchGems(1, this.state.search, categoriesFinal)
+    };
+    render () {
+        return (
+            <div style={{padding: '0 50px'}}>
 
-            <SearchBox onSearch={searchGems}/>
-            <br/>
-            <GemList gems={gems} isFetching={isFetching} hasMore={hasMore} loadMore={loadMore}/>
-        </div>
-    );
+                <SearchBox onSearch={this.searchGems}/>
+                <br/>
+                <Container>
+                    <span style={{fontSize: 16, fontWeight: 700}}>Filter By Category:</span>
+                    <GemCategoriesSelect selectedCategories={this.state.selectedCategories} toggleCategory={this.toggleCategory}/>
+                </Container>
+                <br/>
+                <GemList gems={this.state.gems} isFetching={this.state.isFetching} hasMore={this.state.hasMore} loadMore={this.loadMore}/>
+            </div>
+        )
+    }
 }
 
 export default HomePage;

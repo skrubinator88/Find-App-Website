@@ -16,6 +16,7 @@ import {categories, categories_info} from "../Constants"
 import PlacesAutocomplete from 'react-places-autocomplete';
 import imageCompression from 'browser-image-compression';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import {GemCategoriesSelect} from "../gem-categories/gem-categories";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -230,18 +231,7 @@ function UploadForm(props) {
                       alignItems="center">
                     <Container maxWidth="md">
                         <h3 className={classes.titleText}>Choose a Category (Select all that may apply): </h3>
-                        {categories_info.map((category, index) => {
-                            return (
-                                <Chip
-                                    className={classes.chip}
-                                    variant={selectedCategories.indexOf(category.name) >= 0 ? "default" : "outlined"}
-                                    size="medium"
-                                    style={selectedCategories.indexOf(category.name) >= 0 ? {background: category.color, color: "white"} : {color: category.color, background: "white"}}
-                                    label={category.name}
-                                    onClick={ () => {toggleCategory(category.name)} }
-                                />
-                            );
-                        })}
+                        <GemCategoriesSelect selectedCategories={selectedCategories} toggleCategory={toggleCategory}/>
                     </Container>
                 </Grid>
                 <br/>
