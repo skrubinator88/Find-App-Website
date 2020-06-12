@@ -49,7 +49,7 @@ class SearchPage extends Component {
             gems: [],
             search: '',
             pageNo: 1,
-            hasMore: false,
+            hasMore: true,
             isFetching: false,
             selectedCategories: []
         };
@@ -63,13 +63,13 @@ class SearchPage extends Component {
         }
     };
     fetchGems = async (pageNo, providedSearch, categoryIds) => {
-        console.log(this.state.selectedCategories, " Fetching gems");
         this.setState({error: '', isFetching: true});
         try {
             let response = await FetchServiceModule.fetchGems(pageNo, providedSearch, categoryIds);
             if (response.status === 200) {
                 let data = await response.json();
                 let newGems = (pageNo > 1) ? [...this.state.gems].concat(data.rows) : data.rows;
+                console.log(newGems)
                 this.setState({hasMore: newGems.length < data.count, gems: newGems})
             } else if (response.status === 400) {
                 let error = await response.json();
