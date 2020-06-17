@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Paper from "@material-ui/core/Paper";
 import {GemCategories} from "../gem-categories/gem-categories";
-
+import "./gem-list.css"
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
     progress: {
         display: "inline-block",
         margin: 20
-    }
+    },
 }));
 
 
@@ -89,7 +89,7 @@ const GemList = (props) => {
                         {gem ? <Grid item xs={12} sm={6} md={5} lg={4}>
                             <a href={`/${gem.id}`}>
                                 <Paper className={classes.mediaCard}>
-                                    <span className={[classes.gemTitle]}>{gem.title}</span>
+                                    <span className={[classes.gemTitle]}>{gem.title}</span><span className="viewMore">View More</span>
                                     <br/>
                                     <span className={[classes.gemUser]}>Submitted by {gem.username}</span>
                                     <br/>

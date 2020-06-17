@@ -1,0 +1,12 @@
+@import '~antd/dist/antd.css';
+
+.viewMore {
+    box-shadow: 1px 1px 7px 3px #cccccc;
+    float: right;
+    font-weight: 700;
+    font-size: 12px;
+    border-radius: 20px;
+    color: white;
+    padding: 7px;
+    background-color: #E80065;
+}
