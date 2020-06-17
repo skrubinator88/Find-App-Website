@@ -2,11 +2,16 @@
 
 .viewMore {
     box-shadow: 1px 1px 7px 3px #cccccc;
-    float: right;
+    right: 10px;
+    top: 3px;
     font-weight: 700;
     font-size: 12px;
     border-radius: 20px;
     color: white;
-    padding: 7px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-right: 5px;
+    padding-left: 5px;
     background-color: #E80065;
+    position: absolute;
 }

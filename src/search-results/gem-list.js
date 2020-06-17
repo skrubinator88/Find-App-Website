@@ -14,7 +14,8 @@ const useStyles = makeStyles((theme) => ({
         textAlign: "left",
         maxWidth: "100%",
         maxHeight: 450,
-        padding: 20
+        padding: 20,
+        position: 'relative'
     },
     cardImage: {
         maxWidth: "100%",
@@ -89,7 +90,8 @@ const GemList = (props) => {
                         {gem ? <Grid item xs={12} sm={6} md={5} lg={4}>
                             <a href={`/${gem.id}`}>
                                 <Paper className={classes.mediaCard}>
-                                    <span className={[classes.gemTitle]}>{gem.title}</span><span className="viewMore">View More</span>
+                                    <span className="viewMore">View More</span>
+                                    <span className={[classes.gemTitle]}>{gem.title}</span>
                                     <br/>
                                     <span className={[classes.gemUser]}>Submitted by {gem.username}</span>
                                     <br/>
