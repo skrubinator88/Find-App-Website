@@ -12,7 +12,7 @@
     "antd": "^4.2.5",
     "browser-image-compression": "^1.0.12",
     "compress.js": "^1.1.2",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-favicon": "^2.0.1",
     "lodash.debounce": "^4.0.8",
     "material-auto-rotating-carousel": "^3.0.2",
